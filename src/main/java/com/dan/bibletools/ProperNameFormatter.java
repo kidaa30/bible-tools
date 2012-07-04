@@ -14,14 +14,25 @@ package com.dan.bibletools;
 public class ProperNameFormatter {
 
 	public String formatName(final String inputName) {
+		if (inputName == null) {
+			return null;
+		}
 		return inputName.trim().
 				replaceAll(",", "").
 				replaceAll("\\.", "").
 				replaceAll(":", "").
 				replaceAll(";", "").
 				replaceAll("\\)", "").
+				replaceAll("!", "").
+				replaceAll("\\?", "").
+				replaceAll("'$", "").	//	some names end with '
+				replaceAll("'s$", "").	//	some names end with 's
 				replaceAll("\"", "");
 				
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(new ProperNameFormatter().formatName("LORD's"));
 	}
 	
 }

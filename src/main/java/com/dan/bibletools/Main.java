@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -37,16 +37,13 @@ public class Main {
 		final BookEnum bookEnum = BookEnum.Joshua;
 		
 		//	chapters for which we'll execute the code
-		final Collection<Integer> chapters = new TreeSet<Integer>();
-		chapters.add(13);
-		chapters.add(14);
-		chapters.add(15);
+		final Collection<Integer> chapters = new CollectionUtils().buildIntervalCollection(bookEnum.getFirstChapter(), bookEnum.getLastChapter());
 		
 		final JAXBContext ctx = JAXBContext.newInstance(new Class[] {Bible.class});
 		final Unmarshaller um = ctx.createUnmarshaller();
 		final Bible bible = (Bible) um.unmarshal(new File(infile));
 		
-		final Map<String, Set<BibleReference>> wordRefMap = getAllNamesAndReferencesForBookAndChapters(bookEnum, chapters, bible);
+		final Map<String, Set<BibleReference>> wordRefMap = new TreeMap<String, Set<BibleReference>>(getAllNamesAndReferencesForBookAndChapters(bookEnum, chapters, bible));
     
 		for (final Map.Entry<String, Set<BibleReference>> entry : wordRefMap.entrySet()) {
 			final String word = entry.getKey();

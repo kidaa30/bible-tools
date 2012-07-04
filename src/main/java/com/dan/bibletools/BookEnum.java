@@ -86,35 +86,33 @@ Revelation
  */
 public enum BookEnum {
 
-	Genesis(TestamentEnum.Old, "Genesis"),
-	Exodus(TestamentEnum.Old, "Exodus"),
-	Leviticus(TestamentEnum.Old, "Leviticus"),
-	Numbers(TestamentEnum.Old, "Numbers"),
-	Deuteronomy(TestamentEnum.Old, "Deuteronomy"),
-	Joshua(TestamentEnum.Old, "Joshua"),
+	Genesis(TestamentEnum.Old, "Genesis", 1, 1),
+	Exodus(TestamentEnum.Old, "Exodus", 1, 1),
+	Leviticus(TestamentEnum.Old, "Leviticus", 1, 1),
+	Numbers(TestamentEnum.Old, "Numbers", 1, 1),
+	Deuteronomy(TestamentEnum.Old, "Deuteronomy", 1, 1),
+	Joshua(TestamentEnum.Old, "Joshua", 1, 24),
 	
-	Matthew(TestamentEnum.New, "Matthew"),
-	Mark(TestamentEnum.New, "Mark"),
-	Luke(TestamentEnum.New, "Luke"),
-	John(TestamentEnum.New, "John");
+	Matthew(TestamentEnum.New, "Matthew", 1, 1),
+	Mark(TestamentEnum.New, "Mark", 1, 1),
+	Luke(TestamentEnum.New, "Luke", 1, 1),
+	John(TestamentEnum.New, "John", 1, 1);
 	
 	private final TestamentEnum testament;
 	
 	private final String bookName;
 	
-	private BookEnum(final TestamentEnum testament, final String name) {
+	private final int firstChapter;
+	
+	private final int lastChapter;
+	
+	private BookEnum(final TestamentEnum testament, final String name, final int firstChapter, final int lastChapter) {
 		this.testament = testament;
 		this.bookName = name;
+		this.firstChapter = firstChapter;
+		this.lastChapter = lastChapter;
 	}
 
-	public TestamentEnum getTestament() {
-		return testament;
-	}
-
-	public String getName() {
-		return bookName;
-	}
-	
 	/**
 	 * @return A {@link EnumSet} containing all books from the {@link TestamentEnum#New} testament.
 	 */
@@ -142,5 +140,26 @@ public enum BookEnum {
 		}
 		return EnumSet.copyOf(books);
 	};
+	
+	public TestamentEnum getTestament() {
+		return testament;
+	}
+
+	public String getName() {
+		return bookName;
+	}
+	
+	
+	public String getBookName() {
+		return bookName;
+	}
+
+	public int getFirstChapter() {
+		return firstChapter;
+	}
+
+	public int getLastChapter() {
+		return lastChapter;
+	}
 	
 }

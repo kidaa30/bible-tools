@@ -6,11 +6,13 @@ package com.dan.bibletools;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -45,16 +47,16 @@ public class Main {
 		final Bible bible = (Bible) um.unmarshal(new File(infile));
 		
 		//	build chapter interval
-		final Collection<Integer> chapterInterval = new CollectionUtils().buildIntervalCollection(13, 15);
+		final Collection<Integer> chapterInterval = new CollectionUtils().buildIntervalCollection(1, 24);
 		
 		//	get the map between proper names and their bible references + sort them by key 
-		final Map<String, Set<BibleReference>> wordRefMap = getAllNamesAndReferencesForBookAndChapters(bookEnum, chapterInterval, bible);
+		final Map<String, Set<BibleReference>> wordRefMap = new TreeMap<String, Set<BibleReference>>(getAllNamesAndReferencesForBookAndChapters(bookEnum, chapterInterval, bible));
     
 		//	print the results
 		for (final Map.Entry<String, Set<BibleReference>> entry : wordRefMap.entrySet()) {
 			final String word = entry.getKey();
 			final String referencesString = buildReferencesString(entry.getValue());
-			System.out.println(word + " , " + referencesString);
+			System.out.println(word + " - " + referencesString);
 		}
 		
 		final Set<String> nivPlaces = wordRefMap.keySet(); 
@@ -84,7 +86,7 @@ public class Main {
 	private static String buildReferencesString(final Set<BibleReference> set) {
 		final StringBuilder sb = new StringBuilder();
 		for (final BibleReference ref : set) {
-			sb.append("(").append(ref.getChapter()).append(":").append(ref.getVerse()).append(")");
+			sb.append(ref.getChapter()).append(":").append(ref.getVerse()).append(", ");
 		}
 		return sb.toString();
 	}
@@ -110,6 +112,17 @@ public class Main {
 		
 		final ProperNameFormatter properNameFormatter = new ProperNameFormatter();
 		
+		final Collection<String> stopWords = new ArrayList<String>();
+		
+		try {
+			final Collection<String> englishStopWords = FileUtils.readLines(new File("src/main/resources/english_stopwords.txt"));
+			stopWords.addAll(englishStopWords);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		final StopWordsChecker stopWordsChecker = new StopWordsChecker(stopWords);
+		
 		for (final Book book : bible.getBook()) {
 			if (bookEnum.getName().equalsIgnoreCase(book.getName())) {
 				for (final Chapter chapter : book.getChapter()) {
@@ -122,11 +135,13 @@ public class Main {
 								if (word.length() != 0) {
 									final String _word = properNameFormatter.formatName(word);
 									if (_word.length() != 0) {
-										if (Character.isUpperCase(_word.charAt(0))) {
-											if (wordRefMap.get(_word) == null) {
-												wordRefMap.put(_word, new LinkedHashSet<BibleReference>());
+										if (!stopWordsChecker.isStopWord(_word)) {
+											if (Character.isUpperCase(_word.charAt(0))) {
+												if (wordRefMap.get(_word) == null) {
+													wordRefMap.put(_word, new LinkedHashSet<BibleReference>());
+												}
+												wordRefMap.get(_word).add(bibleReference);
 											}
-											wordRefMap.get(_word).add(bibleReference);
 										}
 									}
 								}

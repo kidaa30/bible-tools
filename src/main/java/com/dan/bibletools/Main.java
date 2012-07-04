@@ -31,15 +31,10 @@ public class Main {
 
 	public static void main(String[] args) throws JAXBException {
 	
-		//	mapping between a word and it's references.
-		final Map<String, Set<BibleReference>> wordRefMap = new HashMap<String, Set<BibleReference>>();
-		
 		//	translation
 		final String infile = "bible-translations/niv.xml";
-		
-		//	bible books for which we'll execute the code
-		final Collection<String> bookNames = new TreeSet<String>();
-		bookNames.add("Joshua");
+
+		final BookEnum bookEnum = BookEnum.Joshua;
 		
 		//	chapters for which we'll execute the code
 		final Collection<Integer> chapters = new TreeSet<Integer>();
@@ -50,22 +45,46 @@ public class Main {
 		final JAXBContext ctx = JAXBContext.newInstance(new Class[] {Bible.class});
 		final Unmarshaller um = ctx.createUnmarshaller();
 		final Bible bible = (Bible) um.unmarshal(new File(infile));
+		
+		final Map<String, Set<BibleReference>> wordRefMap = getAllNamesAndReferencesForBookAndChapters(bookEnum, chapters, bible);
+    
+		for (final Map.Entry<String, Set<BibleReference>> entry : wordRefMap.entrySet()) {
+			final String word = entry.getKey();
+			final Set<BibleReference> refs = entry.getValue();
+			System.out.println(word + " : " + refs.toString());
+		}
+		
+	}
+
+	private static Map<String, Set<BibleReference>> getAllNamesAndReferencesForBookAndChapters(
+			final BookEnum bookEnum,
+			final Collection<Integer> chapters, 
+			final Bible bible) {
+		
+		//	mapping between a word and it's references.
+		final Map<String, Set<BibleReference>> wordRefMap = new HashMap<String, Set<BibleReference>>();
+		
+		final ProperNameFormatter properNameFormatter = new ProperNameFormatter();
+		
 		for (final Book book : bible.getBook()) {
-			System.out.println(book.getName());
-			if (bookNames.contains(book.getName())) {
+			if (bookEnum.getName().equalsIgnoreCase(book.getName())) {
 				for (final Chapter chapter : book.getChapter()) {
 					if (chapters.contains(chapter.getName())) {
 						for (final Verse verse : chapter.getVerse()) {
 							final BibleReference bibleReference = new BibleReference("niv", book.getName(), chapter.getName(), verse.getName());
 							final String text = verse.value;
-							final String [] words = text.split(" ");
+							final String [] words = text.split(" |\\-");
 							for (final String word : words) {
-								final String _word = word.trim();
-								if (Character.isUpperCase(_word.charAt(0))) {
-									if (wordRefMap.get(_word) == null) {
-										wordRefMap.put(_word, new HashSet<BibleReference>());
+								if (word.length() != 0) {
+									final String _word = properNameFormatter.formatName(word);
+									if (_word.length() != 0) {
+										if (Character.isUpperCase(_word.charAt(0))) {
+											if (wordRefMap.get(_word) == null) {
+												wordRefMap.put(_word, new HashSet<BibleReference>());
+											}
+											wordRefMap.get(_word).add(bibleReference);
+										}
 									}
-									wordRefMap.get(_word).add(bibleReference);
 								}
 							}
 						}
@@ -73,13 +92,8 @@ public class Main {
 				}
 			}
 		}
-    
-		for (final Map.Entry<String, Set<BibleReference>> entry : wordRefMap.entrySet()) {
-			final String word = entry.getKey();
-			final Set<BibleReference> refs = entry.getValue();
-			System.out.println(word + ":" + refs.toString());
-		}
 		
+		return wordRefMap;
 	}
 	
 }

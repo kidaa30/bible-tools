@@ -91,6 +91,7 @@ public enum BookEnum {
 	Leviticus(TestamentEnum.Old, "Leviticus"),
 	Numbers(TestamentEnum.Old, "Numbers"),
 	Deuteronomy(TestamentEnum.Old, "Deuteronomy"),
+	Joshua(TestamentEnum.Old, "Joshua"),
 	
 	Matthew(TestamentEnum.New, "Matthew"),
 	Mark(TestamentEnum.New, "Mark"),

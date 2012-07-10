@@ -12,6 +12,7 @@
 		<commons-io.version>2.3</commons-io.version>
 		<jaxb-api.version>2.1</jaxb-api.version>
 		<jaxb-impl.version>2.1</jaxb-impl.version>
+		<poi.version>3.8</poi.version>
 	</properties>
 
 	<build>
@@ -50,6 +51,18 @@
 			<version>${commons-io.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		
 	</dependencies>
 
 	<repositories>

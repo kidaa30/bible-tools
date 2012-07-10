@@ -14,9 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
 
@@ -41,13 +39,10 @@ public class GenerateProperNamesFromBook {
 		//	book
 		final BookEnum bookEnum = BookEnum.Joshua;
 		
-		//	build xml in-memory object 
-		final JAXBContext ctx = JAXBContext.newInstance(new Class[] {Bible.class});
-		final Unmarshaller um = ctx.createUnmarshaller();
-		final Bible bible = (Bible) um.unmarshal(new File(infile));
-		
 		//	build chapter interval
 		final Collection<Integer> chapterInterval = new CollectionUtils().buildIntervalCollection(1, 24);
+		
+		final Bible bible = new BibleUtils().readBible(new File(infile));
 		
 		//	get the map between proper names and their bible references + sort them by key 
 		final Map<String, Set<BibleReference>> wordRefMap = new TreeMap<String, Set<BibleReference>>(getAllNamesAndReferencesForBookAndChapters(bookEnum, chapterInterval, bible));

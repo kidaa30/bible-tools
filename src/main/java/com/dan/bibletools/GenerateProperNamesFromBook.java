@@ -31,7 +31,7 @@ import com.dan.bibletools.Bible.Book.Chapter.Verse;
  * @author Dan Borza [dborza@kno.com]
  * @since Jul 3, 2012
  */
-public class Main {
+public class GenerateProperNamesFromBook {
 
 	public static void main(String[] args) throws JAXBException {
 	

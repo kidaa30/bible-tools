@@ -4,8 +4,7 @@
  */
 package com.dan.bibletools;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.File;
 
 /**
  * Generate a Ms Office Document with multiple parallel translations.
@@ -16,7 +15,21 @@ import java.util.Collection;
  */
 public class GenerateMsOfficeDocWithMultipleTranslations {
 
-	private Collection<Translation> getTranslations() {
-		return new ArrayList<Translation>();
+	public static void main(String[] args) {
+		new GenerateMsOfficeDocWithMultipleTranslations().generate(new File("x"), Translation.NIV, Translation.KJV);
 	}
+	
+	public void generate(final File outputFile, final Translation ... translations) {
+		if (translations == null || translations.length == 0) {
+			System.err.println("Not generating document because no translations were provided.");
+			return;
+		}
+		for (final Translation t : translations) {
+			final File f = new File(t.getPath());
+			if (!f.exists()) {
+				System.err.println("Could not find file '" + f.getAbsolutePath() + "'");
+			}
+		}
+	}
+	
 }

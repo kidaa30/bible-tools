@@ -375,6 +375,14 @@ public class Bible {
 					this.name = value;
 				}
 
+				public String getValue() {
+					return value;
+				}
+
+				public void setValue(String value) {
+					this.value = value;
+				}
+				
 			}
 
 		}

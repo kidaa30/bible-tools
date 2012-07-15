@@ -96,7 +96,8 @@ public enum BookEnum {
 	Matthew(TestamentEnum.New, "Matthew", 1, 1),
 	Mark(TestamentEnum.New, "Mark", 1, 1),
 	Luke(TestamentEnum.New, "Luke", 1, 1),
-	John(TestamentEnum.New, "John", 1, 1);
+	John(TestamentEnum.New, "John", 1, 1),
+	Corinthians_2(TestamentEnum.New, "2 Corinthians", 1, 13);
 	
 	private final TestamentEnum testament;
 	

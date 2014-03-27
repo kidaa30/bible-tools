@@ -101,7 +101,8 @@ public enum BookEnum {
 	Corinthians_2(TestamentEnum.New, "2 Corinthians", 1, 13),
     Colossians(TestamentEnum.New, "Colossians", 1, 4),
 	Peter_1(TestamentEnum.New, "1 Peter", 1, 5),
-	Peter_2(TestamentEnum.New, "2 Peter", 1, 3);
+	Peter_2(TestamentEnum.New, "2 Peter", 1, 3),
+    John_1(TestamentEnum.New, "1 John", 1, 5);
 	
 	private final TestamentEnum testament;
 	

@@ -33,8 +33,8 @@ public class GenerateMsExcelDocWithMultipleTranslations {
 
 	public static void main(String[] args) throws IOException, JAXBException {
 		new GenerateMsExcelDocWithMultipleTranslations().generate(
-				new File("/var/tmp/Colossians.xlsx"),
-				BookEnum.Colossians,
+				new File("/var/tmp/1_John.xlsx"),
+				BookEnum.John_1,
 				Translation.NIV,
 				Translation.NASB,
 				Translation.NRSV,
